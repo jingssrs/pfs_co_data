@@ -10,7 +10,6 @@ NOTE: tutorial jupyternote on SP is very useful to check if you want to learn mo
 | --- | --- |
 | `src/` | Main notebooks and analysis scripts for release checks, coadd summaries, and target/data joins. |
 | `obslog/` | Raw obslog folders, processed obslog CSV outputs, and obslog processing utilities/configs. |
-| `data/` | Local data products and reference files. This folder is ignored by git. |
 
 ## Run And Release Summary
 
