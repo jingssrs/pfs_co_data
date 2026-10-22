@@ -19,7 +19,7 @@ CSV=../../obslog/processed/date_visit_id_$RUN.csv
 
 # 2. download
 ./dw_release.sh --out-dir $OUT_DIR --program $PROGRAM --release $RELEASE \
-    --csv $CSV --products all #--object-group-map \
+    --csv $CSV --products all --object-group-map \
     --coadd-count $N_COADD --coadd-pattern "$COADD_PATTERN" \
     --lam1d-mode release --lam1d-configs brn_modified_updated
 
