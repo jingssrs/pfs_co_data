@@ -294,12 +294,13 @@ print_command() {
 
 run_wget() {
     local url="$1"
-    local args=(-r -k -np --config "$wget_config" "$url")
+    local args=(-r -k -np --tries=3 --config "$wget_config" "$url")
 
     if [[ "$dry_run" == true ]]; then
         print_command "${args[@]}"
     else
-        wget "${args[@]}"
+        # a failed file is logged and skipped instead of stopping the whole script
+        wget "${args[@]}" || echo "$url" >> "$out_dir/failed_downloads.txt"
     fi
 }
 

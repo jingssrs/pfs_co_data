@@ -134,6 +134,9 @@ the Science Platform.
 ./dw_release.sh --release <RELEASE> --csv <date_visit_id.csv> [options] --dry-run
 ```
 
+Each file is tried 3 times. A file that still fails is skipped and its URL is
+added to `<out-dir>/failed_downloads.txt`; the script keeps going.
+
 Always try `--dry-run` first: it prints the `wget` commands without downloading.
 Note that a relative `--csv` path is resolved from your current directory;
 from `src/dw_SP_data/` the processed lists are at `../../obslog/processed/`.
