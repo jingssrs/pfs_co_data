@@ -9,3 +9,4 @@ data_runs/
 src_private/
 *.png
 
+obslog/exptime_strategy/

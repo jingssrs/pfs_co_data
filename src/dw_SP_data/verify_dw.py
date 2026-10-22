@@ -87,7 +87,7 @@ def main():
                         help="Run label used in paths and filenames (e.g., run21_June2025, run22_July2025)")
     parser.add_argument("--max-slot", type=int, default=4,
                         help="Max spectrograph slot you looped over (e.g., 4)")
-    parser.add_argument("--base-dir", type=Path, default=Path("./hscpfs.mtk.nao.ac.jp/fileaccess/pfs/programs/S25A-OT02/2d"),
+    parser.add_argument("--base-dir", type=Path, default=Path("/lustre/work/jingjing.shi/PFS_SSP/hscpfs.mtk.nao.ac.jp/fileaccess/pfs/programs/S25A-OT02/2d"),
                         help="Local mirrored base dir (default assumes wget -r layout)")
     args = parser.parse_args()
 

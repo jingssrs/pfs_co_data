@@ -5,30 +5,31 @@ set -eo pipefail
 #
 # Examples matching the existing scripts:
 #
-#   ./dw_release.sh --release run21_June2025 --csv ../obslog/processed/date_visit_id_march2025.csv --products pfsMerged
+#   ./dw_release.sh --release run21_June2025 --csv ../../obslog/processed/date_visit_id_march2025.csv --products pfsMerged
 #
-#   ./dw_release.sh --release run22_July2025 --csv ../obslog/processed/date_visit_id_may2025.csv --products pfsMerged
+#   ./dw_release.sh --release run22_July2025 --csv ../../obslog/processed/date_visit_id_may2025.csv --products pfsMerged
 #
-#   ./dw_release.sh --release run23_July2025 --csv ../obslog/processed/date_visit_id_june2025.csv \
+#   ./dw_release.sh --release run23_July2025 --csv ../../obslog/processed/date_visit_id_june2025.csv \
 #       --drp2d-root 2d_preview --products detectorMap,pfsConfig,sky1d,pfsCalibrated \
 #       --coadd-count 34 --coadd-pattern 'pfsCoadd_PFS_cosm_run23_{field}_{i}_{release}.fits' \
 #       --lam1d-mode preview --lam1d-root lam1d_preview \
 #       --lam1d-configs default_config,custom_config --run-short run23
 #
-#   ./dw_release.sh --release S25A_November2025 --csv ../obslog/processed/date_visit_id_S25A.csv \
+#   ./dw_release.sh --release S25A_November2025 --csv ../../obslog/processed/date_visit_id_S25A.csv \
 #       --products detectorMap,pfsConfig,sky1d,pfsCalibrated --object-group-map \
 #       --coadd-count 70 --coadd-pattern 'pfsCoadd_PFS_selected_S25A_{field}_{i}_{release}.fits' \
 #       --lam1d-mode release --lam1d-configs default,modified
 #
 #   ./dw_release.sh --program S25B-OT02 --release run25_February2026 \
-#       --csv ../obslog/processed/date_visit_id_nov2025.csv --products all --object-group-map \
+#       --csv ../../obslog/processed/date_visit_id_nov2025.csv --products all --object-group-map \
 #       --coadd-count 82 --coadd-pattern 'pfsCoadd_PFS_selected_run25_{field}_{i}_{release}.fits' \
 #       --lam1d-mode release --lam1d-configs modified
 #
+# Files are saved under --out-dir (default /lustre/work/jingjing.shi/PFS_SSP).
 # Add --dry-run to print wget commands without downloading.
 
 usage() {
-    sed -n '4,28p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '4,29p' "$0" | sed 's/^# \{0,1\}//'
     cat <<'EOF'
 
 Required:
@@ -38,6 +39,8 @@ Usually required:
   --csv FILE                    CSV with date,visit_id columns for visit products.
 
 Common options:
+  --out-dir DIR                 Where downloads are saved (wget -r tree goes here).
+                                Default: /lustre/work/jingjing.shi/PFS_SSP
   --program NAME                Program directory. Default: S25A-OT02.
   --drp2d-root NAME             2d directory name. Default: 2d. Use 2d_preview for preview releases.
   --field ID                    Field/program id used below pfsCoadd and lam1d. Default: 10091.
@@ -80,6 +83,7 @@ trim() {
 program="${PROGRAM:-S25A-OT02}"
 release="${RELEASE:-}"
 csv_file="${CSV_FILE:-}"
+out_dir="${OUT_DIR:-/lustre/work/jingjing.shi/PFS_SSP}"
 base_url="${BASE_URL:-https://hscpfs.mtk.nao.ac.jp/fileaccess/pfs}"
 wget_config="${WGET_CONFIG:-$HOME/.pfs-scienceplatform.wgetrc}"
 drp2d_root="${DRP2D_ROOT:-2d}"
@@ -92,7 +96,7 @@ lam1d_mode="${LAM1D_MODE:-none}"
 lam1d_root="${LAM1D_ROOT:-lam1d}"
 lam1d_configs_csv="${LAM1D_CONFIGS:-default,modified}"
 run_short="${RUN_SHORT:-}"
-object_group_map=false
+object_group_map=true
 object_group_releases_csv="${OBJECT_GROUP_RELEASES:-}"
 dry_run=false
 
@@ -108,6 +112,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --csv)
             csv_file="$2"
+            shift 2
+            ;;
+        --out-dir)
+            out_dir="$2"
             shift 2
             ;;
         --base-url)
@@ -258,6 +266,8 @@ if [[ ${#products[@]} -gt 0 ]]; then
         echo "ERROR: CSV file not found: $csv_file" >&2
         exit 2
     fi
+    # Make the CSV path absolute before we cd into out_dir.
+    csv_file="$(cd "$(dirname "$csv_file")" && pwd)/$(basename "$csv_file")"
 fi
 
 if [[ "$coadd_count" -gt 0 && -z "$coadd_pattern" ]]; then
@@ -441,8 +451,12 @@ echo "Program: ${program}"
 echo "Release: ${release}"
 echo "2d root: ${drp2d_root}"
 echo "Field: ${field}"
+echo "Output dir: ${out_dir}"
 if [[ "$dry_run" == true ]]; then
     echo "Mode: dry run"
+else
+    mkdir -p "$out_dir"
+    cd "$out_dir"
 fi
 
 download_pfs_coadds
