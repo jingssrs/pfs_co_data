@@ -8,5 +8,7 @@ __pycache__/
 data_runs/
 src_private/
 *.png
+/figures/VI_selection_summary/
 
 obslog/exptime_strategy/
+src/dw_SP_data/verify_dw_log/verify_dw_TESTREL.log

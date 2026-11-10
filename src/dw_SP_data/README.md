@@ -124,8 +124,8 @@ the Science Platform.
   `~/.pfs-scienceplatform.wgetrc` (or pass `--wget-config FILE`).
 - Files are saved under `--out-dir` (default `/lustre/work/jingjing.shi/PFS_SSP`).
   The directory is created if needed. Because `wget -r` mirrors the URL, files
-  land in `<out-dir>/hscpfs.mtk.nao.ac.jp/fileaccess/pfs/programs/<program>/...`.
-  objectGroupMap goes to `<out-dir>/fileaccess/pfs/...` (`-nH --cut-dirs=1`).
+  land in `<out-dir>/hscpfs.mtk.nao.ac.jp/fileaccess/pfs/programs/<program>/...`
+  (objectGroupMap included).
 
 ### Basic usage
 
@@ -153,7 +153,7 @@ from `src/dw_SP_data/` the processed lists are at `../../obslog/processed/`.
 | `--drp2d-root` | `2d` | Use `2d_preview` for preview releases |
 | `--field` | `10091` | Field id used in pfsCoadd / lam1d paths |
 | `--slots` | `4` | Spectrograph slots for detectorMap / sky1d (arms b, r, n) |
-| `--object-group-map` | off | Also download objectGroupMap for this release |
+| `--object-group-map` | on | Download objectGroupMap for this release |
 | `--coadd-count N` | `0` | Download pfsCoadd files `i = 1..N` |
 | `--coadd-pattern` | — | pfsCoadd filename; placeholders `{release} {field} {i} {index} {run_short}` |
 | `--lam1d-mode` | `none` | `release`, `preview` or `pfscoadd` (needs `--coadd-count`) |

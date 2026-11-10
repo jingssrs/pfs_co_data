@@ -304,17 +304,6 @@ run_wget() {
     fi
 }
 
-run_wget_object_group() {
-    local url="$1"
-    local args=(-r -k -np -nH --config "$wget_config" --cut-dirs=1 "$url")
-
-    if [[ "$dry_run" == true ]]; then
-        print_command "${args[@]}"
-    else
-        wget "${args[@]}"
-    fi
-}
-
 render_template() {
     local template="$1"
     local i="$2"
@@ -380,7 +369,7 @@ download_object_group_maps() {
     for og_release in "${object_group_releases[@]}"; do
         [[ -z "$og_release" ]] && continue
         url="${program_url}/${drp2d_root}/${og_release}/objectGroupMap/"
-        run_wget_object_group "$url"
+        run_wget "$url"
         echo "Finished objectGroupMap for release: $og_release"
     done
 }
