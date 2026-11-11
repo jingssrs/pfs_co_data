@@ -299,13 +299,27 @@ print_command() {
 
 run_wget() {
     local url="$1"
-    local args=(-r -k -np --tries=3 --config "$wget_config" "$url")
+
+    # folders (objectGroupMap/) need -r; single files are saved directly
+    if [[ "$url" == */ ]]; then
+        local args=(-r -k -np --tries=3 --config "$wget_config" "$url")
+    else
+        local path="${url#https://}"            # same layout as before: hscpfs.mtk.nao.ac.jp/...
+        local args=(--tries=3 --config "$wget_config" -O "$path" "$url")
+    fi
 
     if [[ "$dry_run" == true ]]; then
         print_command "${args[@]}"
-    else
-        # a failed file is logged and skipped instead of stopping the whole script
-        wget "${args[@]}" || echo "$url" >> "$out_dir/failed_downloads.txt"
+        return
+    fi
+
+    [[ "$url" != */ ]] && mkdir -p "$(dirname "$path")"
+    # a failed file is logged and skipped instead of stopping the whole script
+    wget "${args[@]}" || echo "$url" >> "$out_dir/failed_downloads.txt"
+
+    # the server sends an HTML page instead of an error when it refuses a file
+    if [[ "$url" == *.fits && "$(head -c 6 "$path" 2>/dev/null)" != "SIMPLE" ]]; then
+        echo "NOT_FITS $url" >> "$out_dir/failed_downloads.txt"
     fi
 }
 
