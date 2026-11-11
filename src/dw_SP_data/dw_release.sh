@@ -298,14 +298,15 @@ print_command() {
 }
 
 run_wget() {
+    # NOTE: --config must come first, otherwise the server sends the login page
     local url="$1"
 
     # folders (objectGroupMap/) need -r; single files are saved directly
     if [[ "$url" == */ ]]; then
-        local args=(-r -k -np --tries=3 --config "$wget_config" "$url")
+        local args=(--config "$wget_config" -r -k -np --tries=3 "$url")
     else
         local path="${url#https://}"            # same layout as before: hscpfs.mtk.nao.ac.jp/...
-        local args=(--tries=3 --config "$wget_config" -O "$path" "$url")
+        local args=(--config "$wget_config" --tries=3 -O "$path" "$url")
     fi
 
     if [[ "$dry_run" == true ]]; then

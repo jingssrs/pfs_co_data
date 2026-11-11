@@ -30,7 +30,7 @@ CSV=../../obslog/processed/date_visit_id_$RUN.csv
 
 # 2b. butler registry (re-downloaded every time, so it is always up to date)
 #for f in butler.yaml gen3.sqlite3; do
-#    wget -r -np -P $OUT_DIR --config ~/.pfs-scienceplatform.wgetrc \
+#    wget --config ~/.pfs-scienceplatform.wgetrc -r -np -P $OUT_DIR \
 #        https://hscpfs.mtk.nao.ac.jp/fileaccess/pfs/programs/$PROGRAM/2d/$f
 #done
 
