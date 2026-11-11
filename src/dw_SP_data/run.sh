@@ -10,7 +10,7 @@ PROGRAM=S25A-OT02
 RELEASE=S25A-S25B_October2026
 OUT_DIR=/lustre/work/jingjing.shi/PFS_SSP
 N_COADD=738                       # number of pfsCoadd files (different every run)
-COADD_PATTERN='pfsCoadd_PFS_brn_{RUN}_10091_{i}_{release}.fits'
+COADD_PATTERN='pfsCoadd_PFS_brn_S25_{field}_{i}_{release}.fits'
 
 CSV=../../obslog/processed/date_visit_id_$RUN.csv
 
