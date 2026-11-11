@@ -17,17 +17,22 @@ CSV=../../obslog/processed/date_visit_id_$RUN.csv
 # 1. make the visit list
 #python3 ../../obslog/process_obslog.py --config ../../obslog/config_$RUN.json
 
-# 2. download
+# 2. download pfsCoadd only
 ./dw_release.sh --out-dir $OUT_DIR --program $PROGRAM --release $RELEASE \
-    --csv $CSV --products all --object-group-map \
-    --coadd-count $N_COADD --coadd-pattern "$COADD_PATTERN" \
-    --lam1d-mode release --lam1d-configs brn_modified_updated
+    --products none --no-object-group-map \
+    --coadd-count $N_COADD --coadd-pattern "$COADD_PATTERN"
+
+# full download (visits, objectGroupMap, lam1d) - use this instead of the line above
+#./dw_release.sh --out-dir $OUT_DIR --program $PROGRAM --release $RELEASE \
+#    --csv $CSV --products all \
+#    --coadd-count $N_COADD --coadd-pattern "$COADD_PATTERN" \
+#    --lam1d-mode release --lam1d-configs brn_modified_updated
 
 # 2b. butler registry (re-downloaded every time, so it is always up to date)
-for f in butler.yaml gen3.sqlite3; do
-    wget -r -np -P $OUT_DIR --config ~/.pfs-scienceplatform.wgetrc \
-        https://hscpfs.mtk.nao.ac.jp/fileaccess/pfs/programs/$PROGRAM/2d/$f
-done
+#for f in butler.yaml gen3.sqlite3; do
+#    wget -r -np -P $OUT_DIR --config ~/.pfs-scienceplatform.wgetrc \
+#        https://hscpfs.mtk.nao.ac.jp/fileaccess/pfs/programs/$PROGRAM/2d/$f
+#done
 
 # 3. verify
 #python3 verify_dw.py --csv $CSV --run $RELEASE \

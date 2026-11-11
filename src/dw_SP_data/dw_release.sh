@@ -49,6 +49,7 @@ Common options:
                                 Names: detectorMap,pfsConfig,sky1d,pfsCalibrated,pfsMerged
   --slots N                     Spectrograph slots for detectorMap/sky1d. Default: 4.
   --object-group-map            Download objectGroupMap for --release.
+  --no-object-group-map         Skip objectGroupMap (it is on by default).
   --object-group-releases LIST  Extra objectGroupMap release labels, comma-separated.
   --dry-run                     Print commands only.
 
@@ -168,6 +169,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --object-group-map)
             object_group_map=true
+            shift
+            ;;
+        --no-object-group-map)
+            object_group_map=false
             shift
             ;;
         --object-group-releases)
