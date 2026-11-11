@@ -12,3 +12,5 @@ src_private/
 
 obslog/exptime_strategy/
 src/dw_SP_data/verify_dw_log/verify_dw_TESTREL.log
+/src_ts_paper
+/figures
